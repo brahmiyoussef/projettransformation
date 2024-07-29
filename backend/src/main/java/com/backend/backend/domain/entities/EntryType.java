@@ -1,4 +1,4 @@
-package com.backend.domain.entities;
+package com.backend.backend.domain.entities;
 
 public enum EntryType {
     XML("xml"),
