@@ -1,19 +1,23 @@
-package com.backend.domain.entities;
+package com.backend.backend.domain.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.*;
+
+
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-
+    @Column(name = "nom")
     private String nom;
+    @Column(name = "first name")
     private String prenom;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String motDePasse;
 
     // Constructeurs, getters et setters

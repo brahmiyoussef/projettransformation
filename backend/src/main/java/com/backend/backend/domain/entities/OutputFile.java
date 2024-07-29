@@ -1,7 +1,6 @@
-package com.backend.domain.entities;
+package com.backend.backend.domain.entities;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
 public class OutputFile {

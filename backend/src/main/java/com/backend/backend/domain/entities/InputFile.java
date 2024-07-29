@@ -1,6 +1,8 @@
-package com.backend.domain.entities;
-import javax.persistence.*;
+package com.backend.backend.domain.entities;
+
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
 
 @Entity
 public class InputFile {
@@ -23,7 +25,7 @@ public class InputFile {
 
     @ManyToOne
     @JoinColumn(name = "User_id", nullable = false)
-    private User User;
+    private com.backend.backend.domain.entities.User User;
 
     // Constructors, getters, setters
 
@@ -31,7 +33,7 @@ public class InputFile {
         // Default constructor required by JPA
     }
 
-    public InputFile(EntryType entryType, String entryContent, OutputType outputType, LocalDateTime timestamp, User User) {
+    public InputFile(EntryType entryType, String entryContent, OutputType outputType, LocalDateTime timestamp, com.backend.backend.domain.entities.User User) {
         this.entryType = entryType;
         this.entryContent = entryContent;
         this.outputType = outputType;
