@@ -10,6 +10,7 @@ public class helloworldcontroller {
 
     @GetMapping("/hello")
     public String sayHello() {
-        return "Hello, World!";
+        return "Hello every
+        , World!";
     }
 }

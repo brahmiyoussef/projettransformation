@@ -62,4 +62,12 @@
 		</plugins>
 	</build>
 
+	<dependency>
+    <groupId>org.keycloak</groupId>
+    <artifactId>keycloak-spring-boot-starter</artifactId>
+    <version>25.0.2</version>
+	</dependency>
+	
+
+
 </project>
