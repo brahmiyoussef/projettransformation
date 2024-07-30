@@ -1,5 +1,6 @@
 package com.backend.application;
 
 public interface AuthService {
-    void login();
+    void logout();
+    // Autres méthodes d'authentification et d'autorisation
 }
