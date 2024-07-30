@@ -1,3 +1,5 @@
-public class AuthService {
-    
+package com.backend.application;
+
+public interface AuthService {
+    void login();
 }
