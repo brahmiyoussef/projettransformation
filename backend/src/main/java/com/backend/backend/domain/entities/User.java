@@ -1,6 +1,7 @@
 package com.backend.backend.domain.entities;
 
 import jakarta.persistence.*;
+import org.springframework.context.annotation.Bean;
 
 
 @Entity

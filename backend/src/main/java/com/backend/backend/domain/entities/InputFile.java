@@ -1,44 +1,118 @@
-package com.backend.domain.entities;
+package com.backend.backend.domain.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
-
+@Entity
+@Table(name="Input_table")
 public class InputFile implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private List<Item> items;
+    @Column(name = "filename", nullable = false)
+    private String filename;
 
-    public List<Item> getItems() {
-        return items;
+    @Column(name = "content", columnDefinition = "TEXT")
+    private String content;
+
+    @Column(name = "input_type", nullable = false)
+    private String inputType;
+
+    @Column(name = "output_type")
+    private String outputType;
+
+    @Column(name = "timestamp", nullable = false)
+    private LocalDateTime timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    public InputFile() {
+        this.timestamp = LocalDateTime.now(); // Set default timestamp to current time
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    // Parameterized constructor
+    public InputFile(String filename, String content, String inputType, String outputType, User user) {
+        this.filename = filename;
+        this.content = content;
+        this.inputType = inputType;
+        this.outputType = outputType;
+        this.user = user;
+        this.timestamp = LocalDateTime.now(); // Set default timestamp to current time
     }
 
-    public static class Item implements Serializable {
-        @Serial
-        private static final long serialVersionUID = 1L;
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-        private String name;
-        private int age;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public String getName() {
-            return name;
-        }
+    public String getFilename() {
+        return filename;
+    }
 
-        public void setName(String name) {
-            this.name = name;
-        }
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
-        public int getAge() {
-            return age;
-        }
+    public String getContent() {
+        return content;
+    }
 
-        public void setAge(int age) {
-            this.age = age;
-        }
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(String inputType) {
+        this.inputType = inputType;
+    }
+
+    public String getOutputType() {
+        return outputType;
+    }
+
+    public void setOutputType(String outputType) {
+        this.outputType = outputType;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "InputFile{" +
+                "id=" + id +
+                ", filename='" + filename + '\'' +
+                ", content='" + content + '\'' +
+                ", inputType='" + inputType + '\'' +
+                ", outputType='" + outputType + '\'' +
+                ", timestamp=" + timestamp +
+                ", user=" + user +
+                '}';
     }
 }
