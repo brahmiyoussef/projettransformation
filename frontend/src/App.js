@@ -1,96 +1,100 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
+import Cookies from 'js-cookie';
 
 function App() {
-  const [file, setFile] = useState(null);
-  const [fromFormat, setFromFormat] = useState('xml');
-  const [toFormat, setToFormat] = useState('json');
-  const [result, setResult] = useState('');
-  const [fileName, setFileName] = useState('');
+    const [file, setFile] = useState(null);
+    const [fromFormat, setFromFormat] = useState('xml');
+    const [toFormat, setToFormat] = useState('json');
+    const [result, setResult] = useState('');
+    const [fileName, setFileName] = useState('');
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
 
-  const handleConversion = async () => {
-    if (!file) {
-      alert('Please select a file');
-      return;
-    }
+    const handleConversion = async () => {
+        if (!file) {
+            alert('Please select a file');
+            return;
+        }
 
-    const formData = new FormData();
-    formData.append('file', file);
+        const formData = new FormData();
+        formData.append('file', file);
 
-    try {
-      const response = await axios.post(`/api/convert/${fromFormat}/${toFormat}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+        try {
+            const csrfToken = Cookies.get('XSRF-TOKEN');
 
-      setResult(response.data); // Directly use response.data
-    } catch (error) {
-      console.error('Error during file conversion', error);
-      alert('Error during file conversion: ' + error.message);
-    }
-  };
+            const response = await axios.post(`/api/convert/${fromFormat}/${toFormat}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-XSRF-TOKEN': csrfToken // Include the CSRF token
+                },
+            });
 
-  const handleExport = () => {
-    if (!result) {
-      alert('No result to export');
-      return;
-    }
+            setResult(response.data); // Directly use response.data
+        } catch (error) {
+            console.error('Error during file conversion', error);
+            alert('Error during file conversion: ' + error.message);
+        }
+    };
 
-    let exportData = result;
-    let exportFileName = fileName;
+    const handleExport = () => {
+        if (!result) {
+            alert('No result to export');
+            return;
+        }
 
-    if (typeof result === 'object') {
-      exportData = JSON.stringify(result, null, 2);
-    }
+        let exportData = result;
+        let exportFileName = fileName;
 
-    if (!exportFileName) {
-      exportFileName = `exported_file.${toFormat}`;
-    } else {
-      exportFileName += `.${toFormat}`;
-    }
+        if (typeof result === 'object') {
+            exportData = JSON.stringify(result, null, 2);
+        }
 
-    const blob = new Blob([exportData], { type: 'application/octet-stream' });
-    saveAs(blob, exportFileName);
-  };
+        if (!exportFileName) {
+            exportFileName = `exported_file.${toFormat}`;
+        } else {
+            exportFileName += `.${toFormat}`;
+        }
 
-  return (
-      <div className="App">
-        <h1>File Conversion</h1>
-        <input type="file" onChange={handleFileChange} />
-        <div>
-          <label>From: </label>
-          <select value={fromFormat} onChange={(e) => setFromFormat(e.target.value)}>
-            <option value="xml">XML</option>
-            <option value="json">JSON</option>
-          </select>
-          <label>To: </label>
-          <select value={toFormat} onChange={(e) => setToFormat(e.target.value)}>
-            <option value="xml">XML</option>
-            <option value="json">JSON</option>
-          </select>
-        </div>
-        <button onClick={handleConversion}>Convert</button>
-        {result && (
+        const blob = new Blob([exportData], { type: 'application/octet-stream' });
+        saveAs(blob, exportFileName);
+    };
+
+    return (
+        <div className="App">
+            <h1>File Conversion</h1>
+            <input type="file" onChange={handleFileChange} />
             <div>
-              <h2>Result:</h2>
-              <pre>{typeof result === 'object' ? JSON.stringify(result, null, 2) : result}</pre>
-              <input
-                  type="text"
-                  placeholder="Enter file name"
-                  value={fileName}
-                  onChange={(e) => setFileName(e.target.value)}
-              />
-              <button onClick={handleExport}>Export</button>
+                <label>From: </label>
+                <select value={fromFormat} onChange={(e) => setFromFormat(e.target.value)}>
+                    <option value="xml">XML</option>
+                    <option value="json">JSON</option>
+                </select>
+                <label>To: </label>
+                <select value={toFormat} onChange={(e) => setToFormat(e.target.value)}>
+                    <option value="xml">XML</option>
+                    <option value="json">JSON</option>
+                </select>
             </div>
-        )}
-      </div>
-  );
+            <button onClick={handleConversion}>Convert</button>
+            {result && (
+                <div>
+                    <h2>Result:</h2>
+                    <pre>{typeof result === 'object' ? JSON.stringify(result, null, 2) : result}</pre>
+                    <input
+                        type="text"
+                        placeholder="Enter file name"
+                        value={fileName}
+                        onChange={(e) => setFileName(e.target.value)}
+                    />
+                    <button onClick={handleExport}>Export</button>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default App;
