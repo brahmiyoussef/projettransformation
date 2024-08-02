@@ -36,3 +36,35 @@
     transform: rotate(360deg);
   }
 }
+
+/* New styles for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center; /* Center align text horizontally */
+  vertical-align: middle; /* Center align text vertically */
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+button {
+  padding: 8px 16px;
+  margin: 4px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
