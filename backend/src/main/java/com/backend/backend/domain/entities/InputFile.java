@@ -30,7 +30,7 @@ public class InputFile implements Serializable {
     private LocalDateTime timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
     public InputFile() {
         this.timestamp = LocalDateTime.now(); // Set default timestamp to current time
