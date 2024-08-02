@@ -1,14 +1,12 @@
 package com.backend.backend.domain.entities;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Entity
-@Table(name="Input_table")
+@Table(name = "input_table")
 public class InputFile implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +30,7 @@ public class InputFile implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
+
     public InputFile() {
         this.timestamp = LocalDateTime.now(); // Set default timestamp to current time
     }

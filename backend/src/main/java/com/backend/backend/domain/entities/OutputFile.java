@@ -2,11 +2,9 @@ package com.backend.backend.domain.entities;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-import java.util.List;
 @Entity
-@Table(name="Output_table")
-public class OutputFile{
+@Table(name="output_table")
+public class OutputFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,17 +15,20 @@ public class OutputFile{
 
     @Column(name = "converted_content", columnDefinition = "TEXT")
     private String convertedContent;
+
     @OneToOne
     @JoinColumn(name = "input_file_id", nullable = false)
     private InputFile inputFile;
 
     public OutputFile() {
     }
+
     public OutputFile(String targetFormat, String convertedContent, InputFile inputFile) {
         this.targetFormat = targetFormat;
         this.convertedContent = convertedContent;
         this.inputFile = inputFile;
     }
+
     public Long getId() {
         return id;
     }
@@ -40,8 +41,16 @@ public class OutputFile{
         return targetFormat;
     }
 
+    public void setTargetFormat(String targetFormat) {
+        this.targetFormat = targetFormat;
+    }
+
     public String getConvertedContent() {
         return convertedContent;
+    }
+
+    public void setConvertedContent(String convertedContent) {
+        this.convertedContent = convertedContent;
     }
 
     public InputFile getInputFile() {
@@ -50,14 +59,6 @@ public class OutputFile{
 
     public void setInputFile(InputFile inputFile) {
         this.inputFile = inputFile;
-    }
-
-    public void setConvertedContent(String convertedContent) {
-        this.convertedContent = convertedContent;
-    }
-
-    public void setTargetFormat(String targetFormat) {
-        this.targetFormat = targetFormat;
     }
 
     @Override
@@ -69,31 +70,4 @@ public class OutputFile{
                 ", inputFile=" + inputFile +
                 '}';
     }
-/* public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public static class Item implements Serializable {
-        @Serial
-        private static final long serialVersionUID = 1L;
-
-        private String name;
-        private int age;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getAge() {
-            return age;
-        }
-
-        public void setAge(int age) {
-            this.age = age;
-        }
-    }*/
 }
