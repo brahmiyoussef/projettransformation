@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import Cookies from 'js-cookie';
+
 
 function App() {
     const [file, setFile] = useState(null);
@@ -24,12 +24,12 @@ function App() {
         formData.append('file', file);
 
         try {
-            const csrfToken = Cookies.get('XSRF-TOKEN');
 
-            const response = await axios.post(`/api/convert/${fromFormat}/${toFormat}`, formData, {
+
+            const response = await axios.post(`http://localhost:8081/api/convert/${fromFormat}/${toFormat}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'X-XSRF-TOKEN': csrfToken // Include the CSRF token
+
                 },
             });
 
