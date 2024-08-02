@@ -42,10 +42,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/*").permitAll()
+                                .requestMatchers("/hello").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .oauth2Login(withDefaults())
+                .oauth2Login(oauth2Login ->
+                        oauth2Login
+                                .loginPage("/oauth2/authorization/keycloak")
+                                .defaultSuccessUrl("/hello", true)
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .addLogoutHandler(new SecurityContextLogoutHandler())
