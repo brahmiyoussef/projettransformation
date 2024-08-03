@@ -26,7 +26,7 @@ public class  BackendApplication {
 	@Bean
 	public CorsConfigurationSource configurationSourcesearch(){
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:3000/"));
+		corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000/", "http://localhost:8080"));
 		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH","DELETE","OPTIONS"));
 		corsConfiguration.setAllowedHeaders(Arrays.asList("authorization","content-type","x-auth-token"));
 		corsConfiguration.setExposedHeaders(Arrays.asList("Authorization","x-auth-token"));
