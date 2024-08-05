@@ -1,14 +1,14 @@
-// frontend/src/Features/HomePage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import { Link } from 'react-router-dom';  // Import Link from react-router-dom
 import 'C:\\Users\\y.brahmi\\Desktop\\projettranformation\\frontend\\src\\App.css'; // Import the CSS file
+import jsyaml from 'js-yaml';
 
 const HomePage = () => {
   const [file, setFile] = useState(null);
   const [fromFormat, setFromFormat] = useState('xml');
-  const [toFormat, setToFormat] = useState('json');
+  const [toFormat, setToFormat] = useState('yaml'); // Initialize to YAML for default export option
   const [result, setResult] = useState('');
   const [fileName, setFileName] = useState('');
 
@@ -48,14 +48,21 @@ const HomePage = () => {
     let exportData = result;
     let exportFileName = fileName;
 
+    // Convert result to string if it's an object (for JSON and YAML)
     if (typeof result === 'object') {
-      exportData = JSON.stringify(result, null, 2);
+      if (toFormat === 'json') {
+        exportData = JSON.stringify(result, null, 2);
+        exportFileName += '.json';
+      } else if (toFormat === 'yaml') {
+        // Convert JS object to YAML string
+        exportData = jsyaml.dump(result); // Assuming you have imported jsyaml library
+        exportFileName += '.yaml';
+      }
     }
 
+    // If no file name specified, use a default name based on the format
     if (!exportFileName) {
       exportFileName = `exported_file.${toFormat}`;
-    } else {
-      exportFileName += `.${toFormat}`;
     }
 
     const blob = new Blob([exportData], { type: 'application/octet-stream' });
@@ -71,11 +78,13 @@ const HomePage = () => {
         <select value={fromFormat} onChange={(e) => setFromFormat(e.target.value)}>
           <option value="xml">XML</option>
           <option value="json">JSON</option>
+          <option value="yaml">YAML</option> {/* Add YAML option */}
         </select>
         <label>To: </label>
         <select value={toFormat} onChange={(e) => setToFormat(e.target.value)}>
           <option value="xml">XML</option>
           <option value="json">JSON</option>
+          <option value="yaml">YAML</option> {/* Add YAML option */}
         </select>
       </div>
       <button onClick={handleConversion}>Convert</button>
