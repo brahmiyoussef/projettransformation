@@ -71,11 +71,13 @@ const HomePage = () => {
         <select value={fromFormat} onChange={(e) => setFromFormat(e.target.value)}>
           <option value="xml">XML</option>
           <option value="json">JSON</option>
+          <option value="html">HTML</option> {/* Added HTML option */}
         </select>
         <label>To: </label>
         <select value={toFormat} onChange={(e) => setToFormat(e.target.value)}>
           <option value="xml">XML</option>
           <option value="json">JSON</option>
+          <option value="html">HTML</option> {/* Added HTML option */}
         </select>
       </div>
       <button onClick={handleConversion}>Convert</button>
