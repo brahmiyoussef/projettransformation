@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -20,11 +22,22 @@ public class TransformationService {
                 case "xml":
                     if ("json".equals(toFormat)) {
                         return xmlToJson(input);
+                    } else if ("yaml".equals(toFormat)) {
+                        return xmlToYaml(input);
                     }
                     break;
                 case "json":
                     if ("xml".equals(toFormat)) {
                         return jsonToXml(input);
+                    } else if ("yaml".equals(toFormat)) {
+                        return jsonToYaml(input);
+                    }
+                    break;
+                case "yaml":
+                    if ("xml".equals(toFormat)) {
+                        return yamlToXml(input);
+                    } else if ("json".equals(toFormat)) {
+                        return yamlToJson(input);
                     }
                     break;
                 default:
@@ -46,7 +59,23 @@ public class TransformationService {
         Object obj = deserializeFromJson(json);
         return serializeToXml(obj);
     }
+    private String xmlToYaml(String xml) throws IOException {
+        Object obj = deserializeFromXml(xml);
+        return serializeToYaml(obj);
+    }
+    private String yamlToXml(String yaml) throws IOException {
+        Object obj = deserializeFromYaml(yaml);
+        return serializeToXml(obj);
+    }
+    private String jsonToYaml(String json) throws IOException {
+        Object obj = deserializeFromJson(json);
+        return serializeToYaml(obj);
+    }
 
+    private String yamlToJson(String yaml) throws IOException {
+        Object obj = deserializeFromYaml(yaml);
+        return serializeToJson(obj);
+    }
     private Object deserializeFromXml(String xml) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
         return xmlMapper.readValue(xml, new TypeReference<Object>() {});
@@ -65,5 +94,13 @@ public class TransformationService {
     private String serializeToJson(Object obj) throws IOException {
         ObjectMapper jsonMapper = new ObjectMapper();
         return jsonMapper.writeValueAsString(obj);
+    }
+    private Object deserializeFromYaml(String yaml) {
+        Yaml yamlParser = new Yaml();
+        return yamlParser.load(yaml);
+    }
+    private String serializeToYaml(Object obj) {
+        Yaml yaml = new Yaml();
+        return yaml.dump(obj);
     }
 }
