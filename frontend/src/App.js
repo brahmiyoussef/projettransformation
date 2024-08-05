@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './Features/HomePage';
 import HistoryPage from './Features/HistoryPage';
-import 'C:\\Users\\y.brahmi\\Desktop\\projettranformation\\frontend\\src\\App.css';
  // Import the CSS file
 function App() {
 return (
