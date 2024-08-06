@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,9 +25,9 @@ public class  BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 	@Bean
-	public CorsConfigurationSource configurationSourcesearch(){
+	public CorsConfigurationSource configurationSource(){
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000/", "http://localhost:8080"));
+		corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
 		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH","DELETE","OPTIONS"));
 		corsConfiguration.setAllowedHeaders(Arrays.asList("authorization","content-type","x-auth-token"));
 		corsConfiguration.setExposedHeaders(Arrays.asList("Authorization","x-auth-token"));
@@ -34,5 +35,6 @@ public class  BackendApplication {
 		source.registerCorsConfiguration("/**",corsConfiguration);
 		return source;
 	}
+
 
 }
