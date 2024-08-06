@@ -1,10 +1,14 @@
-// frontend/src/Features/HistoryPage.js
+// HistoryPage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Pagination from '../components/Pagination';
 
 const HistoryPage = () => {
   const [history, setHistory] = useState([]);
   const [output, setOutput] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(history.length / itemsPerPage);
 
   useEffect(() => {
     fetchHistory();
@@ -30,11 +34,16 @@ const HistoryPage = () => {
     }
   };
 
+  // Calculate the indices for the current page's items
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = history.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+      <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center text-black">File Upload History</h2>
-        <table className="w-full border-collapse mb-6">
+        <table className="w-full text-left border-collapse mb-6">
           <thead>
             <tr>
               <th className="p-2 border-b">File Name</th>
@@ -45,7 +54,7 @@ const HistoryPage = () => {
             </tr>
           </thead>
           <tbody>
-            {history.map((file) => (
+            {currentItems.map((file) => (
               <tr key={file.id}>
                 <td className="p-2 border-b text-center">{file.filename}</td>
                 <td className="p-2 border-b text-center">{file.inputType}</td>
@@ -63,11 +72,18 @@ const HistoryPage = () => {
           </tbody>
         </table>
         {output && (
-          <div className="bg-gray-200 p-4 rounded overflow-auto">
+          <div className="bg-gray-200 p-4 rounded overflow-auto mb-6">
             <h3 className="text-xl font-bold mb-4 text-black">Output:</h3>
-            <pre>{JSON.stringify(output, null, 2)}</pre>
+            <pre className="whitespace-pre-wrap">{JSON.stringify(output, null, 2)}</pre>
           </div>
         )}
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );

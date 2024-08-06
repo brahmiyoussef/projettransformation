@@ -1,14 +1,17 @@
-// frontend/src/Features/ConvertPage.js
+// TransformationPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
+import FileUploadForm from '../components/FileUploadForm';
+import CustomAlert from '../components/CustomAlert';
 
-const ConvertPage = () => {
+const TransformationPage = () => {
   const [file, setFile] = useState(null);
   const [fromFormat, setFromFormat] = useState('xml');
   const [toFormat, setToFormat] = useState('json');
   const [result, setResult] = useState('');
   const [fileName, setFileName] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -16,7 +19,7 @@ const ConvertPage = () => {
 
   const handleConversion = async () => {
     if (!file) {
-      alert('Please select a file');
+      setErrorMessage('Please select a file to convert.');
       return;
     }
 
@@ -31,15 +34,29 @@ const ConvertPage = () => {
       });
 
       setResult(response.data);
+      setErrorMessage(''); // Clear any previous error message
     } catch (error) {
       console.error('Error during file conversion', error);
-      alert('Error during file conversion: ' + error.message);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        if (error.response.status === 500) {
+          setErrorMessage('Server error during file conversion. Please try again later.');
+        } else {
+          setErrorMessage(`Error: ${error.response.statusText} (${error.response.status})`);
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        setErrorMessage('No response from server. Please check your internet connection.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setErrorMessage('Unexpected error occurred. Please try again.');
+      }
     }
   };
 
   const handleExport = () => {
     if (!result) {
-      alert('No result to export');
+      setErrorMessage('No result to export');
       return;
     }
 
@@ -64,37 +81,16 @@ const ConvertPage = () => {
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-6 text-center text-black">File Conversion</h1>
-        <div className="mb-6">
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-          />
-        </div>
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <label className="mr-2 font-medium text-black">From:</label>
-            <select
-              value={fromFormat}
-              onChange={(e) => setFromFormat(e.target.value)}
-              className="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              <option value="xml">XML</option>
-              <option value="json">JSON</option>
-            </select>
-          </div>
-          <div>
-            <label className="ml-4 mr-2 font-medium text-black">To:</label>
-            <select
-              value={toFormat}
-              onChange={(e) => setToFormat(e.target.value)}
-              className="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              <option value="xml">XML</option>
-              <option value="json">JSON</option>
-            </select>
-          </div>
-        </div>
+
+        {errorMessage && <CustomAlert message={errorMessage} onClose={() => setErrorMessage('')} />}
+
+        <FileUploadForm
+          handleFileChange={handleFileChange}
+          fromFormat={fromFormat}
+          setFromFormat={setFromFormat}
+          toFormat={toFormat}
+          setToFormat={setToFormat}
+        />
         <button
           onClick={handleConversion}
           className="w-full bg-customColor text-white py-2 px-4 rounded hover:bg-secondaryColor transition duration-300"
@@ -127,4 +123,4 @@ const ConvertPage = () => {
   );
 };
 
-export default ConvertPage;
+export default TransformationPage;

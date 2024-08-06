@@ -1,21 +1,22 @@
-// frontend/src/App.js
+// App.js
 import React from 'react';
+import SideBar from './components/SideBar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './Features/HomePage';
-import ConvertPage from './Features/TransforationPage';
-import HistoryPage from './Features/HistoryPage';
-import Sidebar from './components/SideBar';
+import Home from './Features/HomePage';
+import Convert from './Features/TransformationPage';
+import History from './Features/HistoryPage';
+import './App.css'; // Import the CSS file
 
 const App = () => {
   return (
     <Router>
-      <div className="flex h-screen">
-        <Sidebar />
-        <div className="flex-1 p-6 bg-gray-100">
+      <div className="App">
+        <SideBar className="sidebar" />
+        <div className="content">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/convert" element={<ConvertPage />} />
-            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/convert" element={<Convert />} />
+            <Route path="/history" element={<History />} />
           </Routes>
         </div>
       </div>
