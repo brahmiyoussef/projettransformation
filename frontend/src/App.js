@@ -1,24 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import AuthRedirect from './AuthRedirect';
-import Dashboard from './Dashboard';
+import React from 'react';
+import Login from './Login';
 
 const App = () => {
-    const [authenticated, setAuthenticated] = useState(false);
-
-    useEffect(() => {
-        // Check if user is authenticated and update state
-        const token =4// Example token check
-        if (token) {
-            setAuthenticated(true);
-        }
-    }, []);
-
     return (
         <div>
-
-                <AuthRedirect />
-
+            <h1>Keycloak Login</h1>
+            <Login />
         </div>
     );
 };
