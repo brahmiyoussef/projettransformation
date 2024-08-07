@@ -1,4 +1,4 @@
-package com.backend.adapter;
+package com.backend.backend.adapter;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
