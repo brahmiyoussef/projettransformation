@@ -15,18 +15,29 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const params = new URLSearchParams();
-      params.append('client_id', 'asi');
+      params.append('client_id', 'test2');
       params.append('username', username);
       params.append('password', password);
       params.append('grant_type', 'password');
 
-      const response = await axios.post('http://localhost:8080/realms/ASI/protocol/openid-connect/token', params, {
+      const response = await axios.post('http://localhost:8080/realms/test2/protocol/openid-connect/token', params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
       const accessToken = response.data.access_token;
+      
       Cookies.set('authToken', accessToken);
+      await axios.post(
+        '/api/convert/login',
+        null, // No request body needed
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}` // Include token in the Authorization header
+          },
+          withCredentials: true // Include credentials if necessary
+        }
+      );
       login(); // Met à jour l'état d'authentification
       navigate('/'); // Redirige vers la page d'accueil
     } catch (error) {

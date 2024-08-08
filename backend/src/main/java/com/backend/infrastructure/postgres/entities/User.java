@@ -5,37 +5,33 @@ import org.springframework.context.annotation.Bean;
 
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_details")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long id;
-    @Column(name = "nom")
-    private String nom;
-    @Column(name = "first name")
-    private String prenom;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "given_name")
+    private String givenName;
+
+    @Column(name = "family_name")
+    private String familyName;
+
     @Column(name = "email")
     private String email;
-    @Column(name = "password")
-    private String motDePasse;
 
-    // Constructeurs, getters et setters
+    @Column(name = "role")
+    private String role; // Single role field
 
-    public User() {
-        // Constructeur par défaut nécessaire pour JPA
-    }
-
-    public User(String nom, String prenom, String email, String motDePasse) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-        this.motDePasse = motDePasse;
-    }
-
-    // Getters et setters
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -44,20 +40,36 @@ public class User {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getUsername() {
+        return username;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getGivenName() {
+        return givenName;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public String getFamilyName() {
+        return familyName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
     }
 
     public String getEmail() {
@@ -68,11 +80,24 @@ public class User {
         this.email = email;
     }
 
-    public String getMotDePasse() {
-        return motDePasse;
+    public String getRole() {
+        return role;
     }
 
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDetails{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", familyName='" + familyName + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }
