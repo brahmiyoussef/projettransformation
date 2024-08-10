@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/convert")
+@CrossOrigin(origins = "http://localhost:3000")
 public class FileConversionController {
     @Autowired
     private InputFileRepository inputFileRepository;
