@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Container, Button, Card, Title, Textarea, Flex } from '@mantine/core';
-import FileUploadForm from '../components/Convert/FileuploadForm';
+import FileUploadForm from '../components/convert/FileuploadForm';
 import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
 import styles from './convert.module.css';
 import Cookies from 'js-cookie';
