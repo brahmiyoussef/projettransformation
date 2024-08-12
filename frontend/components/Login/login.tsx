@@ -26,12 +26,12 @@ const Login = () => {
 
     try {
       const params = new URLSearchParams();
-      params.append('client_id', 'asi');
+      params.append('client_id', 'test2');
       params.append('username', username);
       params.append('password', password);
       params.append('grant_type', 'password');
 
-      const response = await axios.post('http://localhost:8080/realms/ASI/protocol/openid-connect/token', params, {
+      const response = await axios.post('http://localhost:8080/realms/test2/protocol/openid-connect/token', params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },

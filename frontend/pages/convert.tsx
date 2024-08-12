@@ -4,6 +4,8 @@ import { Container, Button, Card, Title, Textarea, Flex } from '@mantine/core';
 import FileUploadForm from '../components/convert/FileuploadForm';
 import {NavbarMinimal} from '../components/Navbar/NavbarMinimal'; 
 import styles from './convert.module.css';
+import Cookies from 'js-cookie';
+
 
 function ConvertPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -25,9 +27,12 @@ function ConvertPage() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`http://localhost:8080/api/convert/${fromFormat}/${toFormat}`, formData, {
+      const authToken = Cookies.get('authToken');
+      const response = await axios.post(`http://localhost:8081/api/convert/${fromFormat}/${toFormat}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${authToken}`,
+
         },
       });
 

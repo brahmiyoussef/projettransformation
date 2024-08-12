@@ -19,7 +19,7 @@ const HistoryPage = () => {
   const fetchHistory = async () => {
     try {
       const authToken = Cookies.get('authToken');
-      const response = await axios.get('/api/convert/history', {
+      const response = await axios.get('http://localhost:8081/api/convert/history', {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -34,7 +34,7 @@ const HistoryPage = () => {
   const fetchOutput = async (id) => {
     try {
       const authToken = Cookies.get('authToken');
-      const response = await axios.get(`/api/convert/output/${id}`, {
+      const response = await axios.get(`http://localhost:8081/api/convert/output/${id}`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
