@@ -2,8 +2,8 @@
 
 const keycloakConfig = {
     baseUrl: 'http://localhost:8080', 
-    realm: 'test2',
-    clientId: 'test2',
+    realm: 'ASI',
+    clientId: 'asi',
     redirectUri: 'http://localhost:3000/login', 
   };
   

@@ -32,20 +32,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/convert.js"
     ],
-    "/history": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/history.js"
-    ],
     "/home": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/home.js"
-    ],
-    "/profil": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/profil.js"
     ]
   },
   "ampFirstPages": []

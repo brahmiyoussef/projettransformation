@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Container, Paper, Flex, Pagination } from '@mantine/core';
 import Cookies from 'js-cookie';
 import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
-import { TableSort } from '../components/history/TableSort';
-import { TableSortAdmin } from '../components/history';
+import { TableSort } from '../components/History/TableSort';
+import { TableSortAdmin } from '../components/History/TableSortAdmin';
 
 import styles from './history.module.css';
  

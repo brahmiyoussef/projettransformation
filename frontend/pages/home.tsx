@@ -1,21 +1,20 @@
 import React from 'react';
-import {NavbarMinimal} from '../components/Navbar/NavbarMinimal';
-
+import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
+import Image from 'next/image';
+import logo from '../footer.png';
+import styles from './home.module.css'; 
 
 const Dashboard = () => {
-  
-  const handleFileDrop = (files: File[]) => {
-    console.log('Files dropped:', files);
-    
-  };
-
   return (
-    <div>
-      <NavbarMinimal />  
-      <div style={{ textAlign: 'center', marginTop: '20vh' }}>
-        <h1>Welcome to the Dashboard!</h1>
-        <p>You have successfully logged in.</p>
+    <div className={styles.wrapper}>
+      <NavbarMinimal className={styles.navbar} />
+      <div className={styles.container}>
+        <div className={styles.centeredCard}>
+          <h1 className={styles.title}>Welcome to AttijariWafa Bank!</h1>
+          <Image src={logo.src} alt="Logo" width={600} height={200} />
+        </div>
       </div>
+      <div className={styles.movingCircle}></div> {/* Cercle animé */}
     </div>
   );
 };
