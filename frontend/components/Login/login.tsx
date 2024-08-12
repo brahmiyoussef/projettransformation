@@ -30,7 +30,7 @@ const Login = () => {
       params.append('password', password);
       params.append('grant_type', 'password');
 
-      
+
 
       const response = await axios.post(getTokenEndpoint(), params, {
         headers: {
@@ -43,6 +43,15 @@ const Login = () => {
       Cookies.set('authToken', access_token);
       Cookies.set('idToken', id_token);
       Cookies.set('refreshToken', refresh_token);
+      console.log(access_token)
+      const params2 = new URLSearchParams();
+      params2.append('Authorization',access_token)
+      const response2 = await axios.post(`http://localhost:8081/api/convert/login`, params2,{
+      headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: `Bearer ${access_token}`,
+                    },
+                 });
       router.push('/home');
     } catch (error) {
       console.error('Login failed', error);
