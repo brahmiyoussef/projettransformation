@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   ScrollArea,
@@ -83,20 +83,22 @@ interface TableSortProps {
 export function TableSort({ data, onShowOutput }: TableSortProps) {
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
-  const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
+  const [sortBy, setSortBy] = useState<keyof RowData | null>('timestamp');
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
+
+  useEffect(() => {
+    setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search }));
+  }, [data, sortBy, reverseSortDirection, search]);
 
   const setSorting = (field: keyof RowData) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search }));
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
-    setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: value }));
   };
 
   const rows = sortedData.map((row) => (

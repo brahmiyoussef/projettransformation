@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {
@@ -14,7 +13,7 @@ import {
   Anchor,
 } from '@mantine/core';
 import classes from './AuthenticationImage.module.css';
-import logo from '../../Logo_AWB.svg';
+import keycloakConfig, { getTokenEndpoint } from '../../util/keycloakConfig';
 
 const Login = () => {
   const router = useRouter();
@@ -26,20 +25,24 @@ const Login = () => {
 
     try {
       const params = new URLSearchParams();
-      params.append('client_id', 'asi');
+      params.append('client_id', keycloakConfig.clientId);
       params.append('username', username);
       params.append('password', password);
       params.append('grant_type', 'password');
 
-      const response = await axios.post('http://localhost:8080/realms/ASI/protocol/openid-connect/token', params, {
+      
+
+      const response = await axios.post(getTokenEndpoint(), params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          
         },
       });
 
-      const accessToken = response.data.access_token;
-      Cookies.set('authToken', accessToken, { secure: true });
-      // Redirect to home page
+      const { access_token, id_token, refresh_token } = response.data;
+      Cookies.set('authToken', access_token);
+      Cookies.set('idToken', id_token);
+      Cookies.set('refreshToken', refresh_token);
       router.push('/home');
     } catch (error) {
       console.error('Login failed', error);
@@ -49,10 +52,6 @@ const Login = () => {
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          
-        </div>
-
         <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
           Welcome back to Attijariwafa Bank!
         </Title>
@@ -65,7 +64,6 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            classNames={{ input: classes['custom-input'] }} // Apply custom class here
           />
           <PasswordInput
             label="Password"
@@ -75,14 +73,8 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            classNames={{ input: classes['custom-input'] }} // Apply custom class here
           />
-          <Checkbox
-            label="Keep me logged in"
-            mt="xl"
-            size="md"
-            classNames={{ input: classes['mantine-Checkbox-input'] }} // Apply custom class here
-          />
+          <Checkbox label="Keep me logged in" mt="xl" size="md" />
           <Button fullWidth mt="xl" size="md" type="submit" style={{ backgroundColor: '#f8e8c6', color: '#ed5f49' }}>
             Login
           </Button>

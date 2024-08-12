@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Container, Button, Card, Title, Textarea, Flex } from '@mantine/core';
-import FileUploadForm from '../components/convert/FileuploadForm';
-import {NavbarMinimal} from '../components/Navbar/NavbarMinimal'; 
+import FileUploadForm from '../components/Convert/FileuploadForm';
+import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
 import styles from './convert.module.css';
+import Cookies from 'js-cookie';
 
 function ConvertPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -25,13 +26,17 @@ function ConvertPage() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`http://localhost:8080/api/convert/${fromFormat}/${toFormat}`, formData, {
+      const authToken = Cookies.get('authToken');
+      const response = await axios.post(`http://localhost:8081/api/convert/${fromFormat}/${toFormat}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${authToken}`,
         },
       });
 
-      setConvertedContent(response.data);
+      // Convert response data to string
+      const responseData = typeof response.data === 'object' ? JSON.stringify(response.data, null, 2) : response.data;
+      setConvertedContent(responseData);
     } catch (error) {
       console.error('Error converting file:', error);
       alert('Error converting file: ' + error.message);
@@ -39,38 +44,41 @@ function ConvertPage() {
   };
 
   return (
-    <Flex style={{ height: '100vh' }}>
-      <NavbarMinimal style={{ width: '250px', flexShrink: 0 }} /> {/* Navbar added */}
-      <Container className={styles.container}>
-        <Card className={styles.card}>
-          <Title className={styles.title}>File Conversion Service</Title>
+      <Flex style={{ height: '100vh' }}>
+        <NavbarMinimal style={{ width: '250px', flexShrink: 0 }} /> {/* Navbar added */}
+        <Container className={styles.container}>
+          <Card className={styles.card}>
+            <Title className={styles.title}>File Conversion Service</Title>
 
-          <FileUploadForm
-            handleFileChange={handleFileChange}
-            fromFormat={fromFormat}
-            setFromFormat={setFromFormat}
-            toFormat={toFormat}
-            setToFormat={setToFormat} />
+            <FileUploadForm
+                handleFileChange={handleFileChange}
+                fromFormat={fromFormat}
+                setFromFormat={setFromFormat}
+                toFormat={toFormat}
+                setToFormat={setToFormat}
+            />
 
-          <div className={styles['button-container']}>
-            <Button onClick={handleConvert} className={styles.button}>
-              Convert
-            </Button>
-          </div>
+            <div className={styles['button-container']}>
+              <Button onClick={handleConvert} className={styles.button}>
+                Convert
+              </Button>
+            </div>
 
-          {convertedContent && (
-            <Textarea
-              label="Converted Content"
-              value={convertedContent}
-              readOnly
-              autosize
-              minRows={4}
-              className={styles.textarea} />
-          )}
-        </Card>
-      </Container>
-    </Flex>
+            {convertedContent && (
+                <Textarea
+                    label="Converted Content"
+                    value={convertedContent}
+                    readOnly
+                    autosize
+                    minRows={4}
+                    className={styles.textarea}
+                />
+            )}
+          </Card>
+        </Container>
+      </Flex>
   );
 }
 
 export default ConvertPage;
+ 
