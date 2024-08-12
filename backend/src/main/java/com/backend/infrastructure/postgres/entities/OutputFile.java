@@ -26,6 +26,7 @@ public class OutputFile {
     public OutputFile(String targetFormat, String convertedContent, InputFile inputFile) {
         this.targetFormat = targetFormat;
         this.convertedContent = convertedContent;
+
         this.inputFile = inputFile;
     }
 

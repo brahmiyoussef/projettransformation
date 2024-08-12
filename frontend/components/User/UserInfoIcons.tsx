@@ -9,7 +9,6 @@ interface UserInfo {
   name: string;
   email: string;
   phone?: string;
-  picture?: string;
   role?: string;
 }
 
@@ -20,11 +19,23 @@ export function UserInfoIcons() {
     const fetchUserInfo = async () => {
       try {
         const authToken = Cookies.get('authToken');
-        const response = await axios.get('http://your-backend-api/userinfo', {
+        const userID = Cookies.get('userID');
+
+        if (!userID) {
+          console.error('User ID is not available in cookies');
+          return;
+        }
+
+        // Ensure that the userID is being sent correctly as a query parameter
+        const response = await axios.get(`http://localhost:8081/userInfo`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
           },
+          params: { userId: userID }, // Query parameter
         });
+
+        console.log('User Info:', response.data); // Log user info to console
         setUserInfo(response.data);
       } catch (error) {
         console.error('Error fetching user info', error);
@@ -35,13 +46,13 @@ export function UserInfoIcons() {
   }, []);
 
   if (!userInfo) {
-    return null; // or a loading spinner
+    return <div>Loading...</div>; // Or a loading spinner
   }
 
   return (
     <div>
       <Group wrap="nowrap">
-        <Avatar src={userInfo.picture || 'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png'} size={94} radius="md" />
+        
         <div>
           <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
             {userInfo.role || 'User'}

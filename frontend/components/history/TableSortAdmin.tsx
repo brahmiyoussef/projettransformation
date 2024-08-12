@@ -17,6 +17,7 @@ interface RowData {
   outputType: string;
   timestamp: string;
   id: string;
+  userName: string;
 }
  
 interface ThProps {
@@ -110,6 +111,7 @@ export function TableSort({ data, onShowOutput }: TableSortProps) {
       <Table.Td>
         <button onClick={() => onShowOutput(row.id)}>Show Output</button>
       </Table.Td>
+      <Table.Td>{row.userName}</Table.Td>
     </Table.Tr>
   ));
  
@@ -135,6 +137,9 @@ export function TableSort({ data, onShowOutput }: TableSortProps) {
               To Format
             </Th>
             <Th sorted={sortBy === 'timestamp'} reversed={reverseSortDirection} onSort={() => setSorting('timestamp')}>
+              Uploaded At
+            </Th>
+            <Th sorted={sortBy === 'userName'} reversed={reverseSortDirection} onSort={() => setSorting('userName')}>
               Uploaded At
             </Th>
             <Th>Show Output</Th>

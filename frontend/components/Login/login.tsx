@@ -43,7 +43,6 @@ const Login = () => {
       Cookies.set('authToken', access_token);
       Cookies.set('idToken', id_token);
       Cookies.set('refreshToken', refresh_token);
-      console.log(access_token)
       const params2 = new URLSearchParams();
       params2.append('Authorization',access_token)
       const response2 = await axios.post(`http://localhost:8081/api/convert/login`, params2,{
@@ -52,6 +51,11 @@ const Login = () => {
               Authorization: `Bearer ${access_token}`,
                     },
                  });
+      const userID = response2.data.id;
+      Cookies.set('userID', userID);
+      const userrole = response2.data.role;
+      Cookies.set('userrole', userrole);
+      console.log('userID' + userID)
       router.push('/home');
     } catch (error) {
       console.error('Login failed', error);

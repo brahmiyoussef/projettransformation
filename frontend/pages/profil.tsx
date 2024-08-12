@@ -8,7 +8,6 @@ const ProfilPage = () => {
       <Navbar />
       <div style={{ flex: 1, padding: '20px' }}>
         <div style={{ textAlign: 'center', marginTop: '20vh' }}>
-          <h1>Welcome to Account Page</h1>
           <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
             <UserInfoIcons />
           </div>

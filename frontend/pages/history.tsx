@@ -3,20 +3,22 @@ import axios from 'axios';
 import { Container, Paper, Flex, Pagination } from '@mantine/core';
 import Cookies from 'js-cookie';
 import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
-import { TableSort } from '../components/History/TableSort';
-import styles from './history.module.css';
+import { TableSort } from '../components/history/TableSort';
+import { TableSortAdmin } from '../components/history';
 
+import styles from './history.module.css';
+ 
 const HistoryPage = () => {
   const [history, setHistory] = useState([]);
   const [convertedContent, setConvertedContent] = useState(null);
   const [selectedOutputId, setSelectedOutputId] = useState(null);
   const [activePage, setActivePage] = useState(1);
   const itemsPerPage = 10;
-
+ 
   useEffect(() => {
     fetchHistory();
   }, []);
-
+ 
   const fetchHistory = async () => {
     try {
       const authToken = Cookies.get('authToken');
@@ -31,7 +33,7 @@ const HistoryPage = () => {
       alert('Error fetching file history: ' + error.message);
     }
   };
-
+ 
   const fetchOutput = async (id) => {
     try {
       const authToken = Cookies.get('authToken');
@@ -48,16 +50,16 @@ const HistoryPage = () => {
       alert('Error fetching file output: ' + error.message);
     }
   };
-
+ 
   const handlePageChange = (page) => {
     setActivePage(page);
   };
-
+ 
   const paginatedData = history.slice(
       (activePage - 1) * itemsPerPage,
       activePage * itemsPerPage
   );
-
+ 
   return (
       <Flex className={styles.page}>
         <NavbarMinimal style={{ width: '250px', flexShrink: 0 }} /> {/* Navbar added */}
@@ -84,6 +86,7 @@ const HistoryPage = () => {
       </Flex>
   );
 };
-
+ 
 export default HistoryPage;
+ 
  
