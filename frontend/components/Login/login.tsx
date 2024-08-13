@@ -52,6 +52,10 @@ const Login = () => {
               Authorization: `Bearer ${access_token}`,
                     },
                  });
+      const userID = response2.data.id
+      Cookies.set('userID', userID); 
+      const userrole = response2.data.role
+      Cookies.set('userrole', userrole); 
       router.push('/home');
     } catch (error) {
       console.error('Login failed', error);
@@ -89,12 +93,6 @@ const Login = () => {
           </Button>
         </form>
  
-        <Text ta="center" mt="md">
-          Don&apos;t have an account?{' '}
-          <Anchor<'a'> href="#" fw={700} onClick={(event) => event.preventDefault()} className={classes.link}>
-            Register
-          </Anchor>
-        </Text>
       </Paper>
     </div>
   );

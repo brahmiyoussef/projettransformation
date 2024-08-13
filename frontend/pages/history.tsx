@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Paper, Flex, Pagination } from '@mantine/core';
+import { Container, Paper, Flex, Pagination, Textarea } from '@mantine/core';
 import Cookies from 'js-cookie';
 import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
-import { TableSort } from '../components/History/TableSort';
-import { TableSortAdmin } from '../components/History/TableSortAdmin';
+import { TableSort } from '../components/history/TableSort';
+import { TableSortAdmin } from '../components/history/TableSortAdmin';
 
 import styles from './history.module.css';
- 
+
 const HistoryPage = () => {
   const [history, setHistory] = useState([]);
   const [convertedContent, setConvertedContent] = useState(null);
   const [selectedOutputId, setSelectedOutputId] = useState(null);
   const [activePage, setActivePage] = useState(1);
+  const [userRole, setUserRole] = useState('user'); // default to 'user' or any default role
   const itemsPerPage = 10;
- 
+
   useEffect(() => {
     fetchHistory();
+    getUserRole();
   }, []);
- 
+
   const fetchHistory = async () => {
     try {
       const authToken = Cookies.get('authToken');
@@ -33,7 +35,12 @@ const HistoryPage = () => {
       alert('Error fetching file history: ' + error.message);
     }
   };
- 
+
+  const getUserRole = () => {
+    const role = Cookies.get('userrole'); // assuming the role is stored in cookies under 'userRole'
+    setUserRole(role || 'user'); // default to 'user' if no role found
+  };
+
   const fetchOutput = async (id) => {
     try {
       const authToken = Cookies.get('authToken');
@@ -42,7 +49,6 @@ const HistoryPage = () => {
           Authorization: `Bearer ${authToken}`,
         },
       });
-      // Extract the convertedContent from the response data
       setConvertedContent(response.data.convertedContent);
       setSelectedOutputId(id);
     } catch (error) {
@@ -50,43 +56,50 @@ const HistoryPage = () => {
       alert('Error fetching file output: ' + error.message);
     }
   };
- 
+
   const handlePageChange = (page) => {
     setActivePage(page);
   };
- 
+
   const paginatedData = history.slice(
-      (activePage - 1) * itemsPerPage,
-      activePage * itemsPerPage
+    (activePage - 1) * itemsPerPage,
+    activePage * itemsPerPage
   );
- 
+
   return (
-      <Flex className={styles.page}>
-        <NavbarMinimal style={{ width: '250px', flexShrink: 0 }} /> {/* Navbar added */}
-        <Container className={styles.container}>
-          <Paper className={styles.card} padding="lg" shadow="md" withBorder>
+    <Flex className={styles.page}>
+      <NavbarMinimal style={{ width: '250px', flexShrink: 0 }} /> {/* Navbar added */}
+      <Container className={styles.container}>
+        <Paper className={styles.card} padding="lg" shadow="md" withBorder>
+          {userRole === 'admin' ? (
+            <TableSortAdmin data={paginatedData} onShowOutput={fetchOutput} />
+          ) : (
             <TableSort data={paginatedData} onShowOutput={fetchOutput} />
-            <Pagination
-                total={Math.ceil(history.length / itemsPerPage)}
-                page={activePage}
-                onChange={handlePageChange}
-                color="#ed5f49"
-                radius="md"
-                withEdges
-                mt="lg"
+          )}
+
+          <Pagination
+            total={Math.ceil(history.length / itemsPerPage)}
+            page={activePage}
+            onChange={handlePageChange}
+            color="#ed5f49"
+            radius="md"
+            withEdges
+            mt="lg"
+          />
+          {convertedContent && (
+            <Textarea
+              label="Converted Content"
+              value={convertedContent}
+              readOnly
+              autosize
+              minRows={4}
+              className={styles.textarea}
             />
-            {selectedOutputId && convertedContent && (
-                <div className={styles.outputContainer}>
-                  <h3>Output for ID: {selectedOutputId}</h3>
-                  <pre>{convertedContent}</pre> {/* Display only the convertedContent */}
-                </div>
-            )}
-          </Paper>
-        </Container>
-      </Flex>
+          )}
+        </Paper>
+      </Container>
+    </Flex>
   );
 };
- 
+
 export default HistoryPage;
- 
- 

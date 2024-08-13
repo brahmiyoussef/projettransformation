@@ -14,7 +14,7 @@ const Dashboard = () => {
           <Image src={logo.src} alt="Logo" width={600} height={200} />
         </div>
       </div>
-      <div className={styles.movingCircle}></div> {/* Cercle animé */}
+
     </div>
   );
 };
