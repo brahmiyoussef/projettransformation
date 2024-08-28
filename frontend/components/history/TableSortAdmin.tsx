@@ -107,13 +107,14 @@ function TableSortAdmin({ data, onShowOutput }: TableSortProps) {
       <Table.Td>{row.inputType}</Table.Td>
       <Table.Td>{row.outputType}</Table.Td>
       <Table.Td>{new Date(row.timestamp).toLocaleString()}</Table.Td>
-
-      <Table.Td>{row.user.username}</Table.Td>
+  
+      <Table.Td>{row.userName}</Table.Td>
       <Table.Td>
         <button onClick={() => onShowOutput(row.id)}>Show Output</button>
       </Table.Td>
     </Table.Tr>
   ));
+  
 
   return (
     <ScrollArea>
@@ -142,7 +143,9 @@ function TableSortAdmin({ data, onShowOutput }: TableSortProps) {
             <Th sorted={sortBy === 'userName'} reversed={reverseSortDirection} onSort={() => setSorting('userName')}>
               User Name
             </Th>
-            <Th>Show Output</Th>
+            <Th reversed={false} sorted={false} onSort={() => {}}>
+            Show Output
+            </Th>
           </Table.Tr>
         </Table.Tbody>
         <Table.Tbody>

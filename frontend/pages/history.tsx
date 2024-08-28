@@ -5,15 +5,16 @@ import Cookies from 'js-cookie';
 import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
 import { TableSort } from '../components/history/TableSort';
 import { TableSortAdmin } from '../components/history/TableSortAdmin';
-
 import styles from './history.module.css';
+import withAuth from './withAuth';
+ 
 
 const HistoryPage = () => {
   const [history, setHistory] = useState([]);
-  const [convertedContent, setConvertedContent] = useState(null);
-  const [selectedOutputId, setSelectedOutputId] = useState(null);
-  const [activePage, setActivePage] = useState(1);
-  const [userRole, setUserRole] = useState('user'); // default to 'user' or any default role
+  const [convertedContent, setConvertedContent] = useState<string | null>(null);
+  const [selectedOutputId, setSelectedOutputId] = useState<string | null>(null);
+  const [activePage, setActivePage] = useState<number>(1);
+  const [userRole, setUserRole] = useState('user');
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -32,16 +33,16 @@ const HistoryPage = () => {
       setHistory(response.data);
     } catch (error) {
       console.error('Error fetching file history', error);
-      alert('Error fetching file history: ' + error.message);
+      alert('Error fetching file history: ' + (error as Error).message);
     }
   };
 
   const getUserRole = () => {
-    const role = Cookies.get('userrole'); // assuming the role is stored in cookies under 'userRole'
-    setUserRole(role || 'user'); // default to 'user' if no role found
+    const role = Cookies.get('userrole');
+    setUserRole(role || 'user');
   };
 
-  const fetchOutput = async (id) => {
+  const fetchOutput = async (id: string) => {
     try {
       const authToken = Cookies.get('authToken');
       const response = await axios.get(`http://localhost:8081/api/convert/output/${id}`, {
@@ -53,11 +54,11 @@ const HistoryPage = () => {
       setSelectedOutputId(id);
     } catch (error) {
       console.error('Error fetching file output', error);
-      alert('Error fetching file output: ' + error.message);
+      alert('Error fetching file output: ' + (error as Error).message);
     }
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setActivePage(page);
   };
 
@@ -68,9 +69,11 @@ const HistoryPage = () => {
 
   return (
     <Flex className={styles.page}>
-      <NavbarMinimal style={{ width: '250px', flexShrink: 0 }} /> {/* Navbar added */}
+      <div style={{ width: '250px', flexShrink: 0 }}>
+        <NavbarMinimal />
+      </div>
       <Container className={styles.container}>
-        <Paper className={styles.card} padding="lg" shadow="md" withBorder>
+        <Paper className={styles.card} shadow="md" withBorder>
           {userRole === 'admin' ? (
             <TableSortAdmin data={paginatedData} onShowOutput={fetchOutput} />
           ) : (
@@ -79,7 +82,7 @@ const HistoryPage = () => {
 
           <Pagination
             total={Math.ceil(history.length / itemsPerPage)}
-            page={activePage}
+            value={activePage}
             onChange={handlePageChange}
             color="#ed5f49"
             radius="md"
@@ -102,4 +105,5 @@ const HistoryPage = () => {
   );
 };
 
-export default HistoryPage;
+export default withAuth(HistoryPage);
+ 
